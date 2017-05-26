@@ -8,19 +8,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = () => ({
   entry: {
-    polyfills: require('./src/polyfills'),
+    polyfills: './src/polyfills',
     main: [
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8080',
       'webpack/hot/only-dev-server',
-      './src/index.js'
+      './src/index.jsx',
     ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-  }
+  },
   output: {
-    fileName: '[name].js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
   },
@@ -55,7 +55,7 @@ module.exports = () => ({
       },
       chunks: 'main',
     }),
-    new webpack({
+    new CommonsChunkPlugin({
       name: 'manifest'
     }),
     new webpack.NamedModulesPlugin(),
@@ -66,3 +66,4 @@ module.exports = () => ({
     }),
   ]
 })
+
