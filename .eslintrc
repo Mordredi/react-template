@@ -3,5 +3,8 @@
   "env": {
     "browser": true,
     "commonjs": true
+  },
+  "rules": {
+    "import/prefer-default-export": "off"
   }
 }
