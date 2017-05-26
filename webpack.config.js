@@ -5,16 +5,17 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const { CommonsChunkPlugin } = require('webpack').optimize;
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const entryPoints = ['manifest', 'polyfills', 'vendor', 'main']
 
 module.exports = () => ({
   entry: {
-    polyfills: './src/polyfills',
     main: [
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:8080',
       'webpack/hot/only-dev-server',
+      require.resolve('./src/polyfills'),
       './src/index.jsx',
-    ],
+    ]
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -46,6 +47,7 @@ module.exports = () => ({
     hot: true,
     contentBase: path.resolve(__dirname, 'dist'),
     publicPath: '/',
+    historyApiFallback: true,
   },
   plugins: [
     new CommonsChunkPlugin({
@@ -63,7 +65,19 @@ module.exports = () => ({
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body',
+      chunksSortMode(left, right) {
+        const leftIndex = entryPoints.indexOf(left.names[0]);
+        const rightIndex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightIndex) {
+          return 1;
+        }
+        if (leftIndex < rightIndex) {
+          return -1;
+        }
+        return 0;
+      }
     }),
+    new ProgressPlugin(),
   ]
 })
 
