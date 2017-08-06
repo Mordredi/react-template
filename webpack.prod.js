@@ -1,3 +1,5 @@
+const Merge = require('webpack-merge');
+const commonConfig = require('./webpack.common');
 const webpack = require('webpack');
 const path = require('path');
 
@@ -9,10 +11,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const entryPoints = ['manifest', 'polyfills', 'vendor', 'main'];
-
-
-module.exports = {
+module.exports = Merge(commonConfig, {
   entry: {
     main: [
       require.resolve('./src/polyfills'),
@@ -32,11 +31,6 @@ module.exports = {
     rules: [
       {
         test: /.jsx?$/,
-        use: ['eslint-loader'],
-        exclude: /node_modules/, 
-        enforce: 'pre',
-      }, {
-        test: /.jsx?$/,
         use: [{
           loader: 'babel-loader',
           options: {
@@ -44,9 +38,6 @@ module.exports = {
           },
         }],
         exclude: /node_modules/, 
-      }, {
-        test: /.html$/,
-        use: ['html-loader'],
       }, {
         test: /.(s?)css$/,
         use: ExtractTextPlugin.extract({
@@ -59,12 +50,6 @@ module.exports = {
             },
           }, 'sass-loader'],
         }),
-      }, {
-        test: /\.(jpg|png|svg)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 25000,
-        },
       },
     ],
   },
@@ -100,41 +85,7 @@ module.exports = {
       },
       comments: false
     }),
-    new CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks(module) {
-        return module.context && module.context.indexOf('node_modules') !== -1;
-      },
-      chunks: 'main',
-    }),
-    new CommonsChunkPlugin({
-      name: 'manifest'
-    }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new ProgressPlugin(),
-    new WebpackPwaManifest({
-      name: 'Arthur Wright',
-      short_name: 'ArthurWright',
-      description: 'Programmer/Performer',
-      background_color: '#F7FFFE',
-      start_url: '/?utm_source=homescreen',
-      display: 'standalone',
-      theme_color: '#001357',
-      inject: false,
-      fingerprints: false,
-      icons: [
-        {
-          src: path.resolve('src/img/sample-image.png'),
-          sizes: [192, 512],
-        }, 
-      ],
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: './src/img',
-        to: 'img',
-      },
-    ]),
   ]
-};
+});
 

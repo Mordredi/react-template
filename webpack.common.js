@@ -2,8 +2,7 @@ const webpack = require('webpack');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const { CommonsChunkPlugin } = require('webpack').optimize;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const entryPoints = ['manifest', 'polyfills', 'vendor', 'main'];
+const path = require('path');
 
 module.exports = {
   resolve: {
@@ -42,9 +41,10 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new CopyWebpackPlugin([
       {
-        from: './src/img',
-        to: 'img',
+        from: path.resolve(__dirname, 'src/assets'),
+        to: 'assets',
       },
     ]),
+    new ProgressPlugin(),
   ],
 };

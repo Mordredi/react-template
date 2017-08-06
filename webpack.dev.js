@@ -1,9 +1,13 @@
+const Merge = require('webpack-merge');
+const commonConfig = require('./webpack.common');
+
 const webpack = require('webpack');
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const entryPoints = ['manifest', 'polyfills', 'vendor', 'main'];
 
-module.exports = {
+module.exports = Merge(commonConfig, {
   entry: {
     main: [
       'react-hot-loader/patch',
@@ -62,6 +66,6 @@ module.exports = {
         return 0;
       }
     }),
-  ]
-};
+  ],
+});
 
