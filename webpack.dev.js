@@ -1,12 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const { CommonsChunkPlugin } = require('webpack').optimize;
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const entryPoints = ['manifest', 'polyfills', 'vendor', 'main']
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -18,9 +13,6 @@ module.exports = {
       './src/index.dev.jsx',
     ]
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
@@ -30,18 +22,10 @@ module.exports = {
     rules: [
       {
         test: /.jsx?$/,
-        use: ['eslint-loader'],
-        exclude: /node_modules/,
-        enforce: 'pre',
-      }, {
-        test: /.jsx?$/,
         use: [
           'babel-loader',
         ],
         exclude: /node_modules/,
-      }, {
-        test: /.html$/,
-        use: ['html-loader'],
       }, {
         test: /.(s?)css$/,
         use: ['style-loader', {
@@ -51,12 +35,6 @@ module.exports = {
             localIdentName: '[hash:8]',
           },
         }, 'sass-loader'],
-      }, {
-        test: /\.(jpg|png|svg)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 25000,
-        },
       },
     ],
   },
@@ -68,17 +46,6 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks(module) {
-        return module.context && module.context.indexOf('node_modules') !== -1;
-      },
-      chunks: 'main',
-    }),
-    new CommonsChunkPlugin({
-      name: 'manifest'
-    }),
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
@@ -95,13 +62,6 @@ module.exports = {
         return 0;
       }
     }),
-    new ProgressPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: './src/assets',
-        to: 'assets',
-      },
-    ]),
   ]
 };
 
