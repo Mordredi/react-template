@@ -5,6 +5,7 @@
     "commonjs": true
   },
   "rules": {
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "max-len": "off"
   }
 }

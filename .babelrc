@@ -1,4 +1,35 @@
 {
   "presets": ["react", ["es2015", {"modules": false}], "stage-3"],
-  "plugins": ["dynamic-import-node", "syntax-dynamic-import", "react-hot-loader/babel"]
+  "plugins": ["react-hot-loader/babel"],
+  "env": {
+    "production": {
+      "plugins": [
+        [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove",
+            "removeImport": true
+          }
+        ],
+      ],
+    },
+    "server": {
+      "presets": ["react", "es2015", "stage-3"],
+      "plugins": [ 
+        [
+          "css-modules-transform", {
+            "preprocessCss": "./loaders/sass-loader.js", 
+            "generateScopedName": "[hash:8]",
+            "extensions": [".scss"]
+          }
+        ], [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove",
+            "removeImport": true
+          }
+        ]
+      ]
+    }
+  }
 }
