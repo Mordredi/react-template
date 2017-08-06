@@ -31,14 +31,14 @@ module.exports = {
       {
         test: /.jsx?$/,
         use: ['eslint-loader'],
-        exclude: /node_modules/, 
+        exclude: /node_modules/,
         enforce: 'pre',
       }, {
         test: /.jsx?$/,
         use: [
           'babel-loader',
         ],
-        exclude: /node_modules/, 
+        exclude: /node_modules/,
       }, {
         test: /.html$/,
         use: ['html-loader'],
@@ -98,8 +98,8 @@ module.exports = {
     new ProgressPlugin(),
     new CopyWebpackPlugin([
       {
-        from: './src/img',
-        to: 'img',
+        from: './src/assets',
+        to: 'assets',
       },
     ]),
   ]
